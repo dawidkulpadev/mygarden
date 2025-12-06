@@ -6,7 +6,6 @@ const db = new sqlite3.Database(dbPath);
 
 function initDb() {
   db.serialize(() => {
-    // Użytkownicy (na razie prosty model)
     db.run(`
       CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -16,7 +15,7 @@ function initDb() {
       )
     `);
 
-    // Pokoje
+    
     db.run(`
       CREATE TABLE IF NOT EXISTS rooms (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -26,7 +25,7 @@ function initDb() {
       )
     `);
 
-    // Sekcje
+    
     db.run(`
       CREATE TABLE IF NOT EXISTS sections (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -36,7 +35,7 @@ function initDb() {
       )
     `);
 
-    // Rośliny
+    
     db.run(`
       CREATE TABLE IF NOT EXISTS plants (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,7 +46,7 @@ function initDb() {
       )
     `);
 
-    // Urządzenia
+    
     db.run(`
       CREATE TABLE IF NOT EXISTS devices (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -127,7 +126,7 @@ function seedData() {
                        light_sunrise_minutes, light_sunset_minutes, light_max_power)
                       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
                       [
-                        'Sterownik światła salon półka',
+                        'Środek',
                         'lightController',
                         sec1,
                         '08:00',
@@ -141,13 +140,13 @@ function seedData() {
                     db.run(
                       `INSERT INTO devices (name, type, section_id)
                        VALUES (?, ?, ?)`,
-                      ['Czujnik powietrza salon', 'airSensor', sec1],
+                      ['Główny', 'airSensor', sec1],
                     );
 
                     db.run(
                       `INSERT INTO devices (name, type, plant_id)
                        VALUES (?, ?, ?)`,
-                      ['Czujnik wilgotności Monstera', 'soilMoistureSensor', 1],
+                      ['a', 'soilMoistureSensor', 1],
                     );
                   },
                 );

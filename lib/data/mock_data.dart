@@ -22,27 +22,26 @@ final plants = <Plant>[
 ];
 
 final devices = <Device>[
-  // Urządzenia w sekcjach (światło / powietrze)
   Device(
     id: 'dev1',
-    name: 'Sterownik światła salon półka',
+    name: 'Środek',
     type: DeviceType.lightController,
     sectionId: 'sec1',
   ),
   Device(
     id: 'dev2',
-    name: 'Czujnik powietrza salon',
+    name: 'Główne',
     type: DeviceType.airSensor,
     sectionId: 'sec1',
   ),
   Device(
     id: 'dev3',
-    name: 'Sterownik światła nad fotelem',
+    name: 'Nad fotelem',
     type: DeviceType.lightController,
     sectionId: 'sec2',
   ),
 
-  // Czujniki wilgotności przypięte do roślin
+
   Device(
     id: 'dev4',
     name: 'Czujnik wilgotności Monstera',

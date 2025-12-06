@@ -4,10 +4,8 @@ const { db, initDb } = require('./db');
 
 const app = express();
 
-// 1) PORT z ENV (hosting zwykle nadaje swój)
 const PORT = process.env.PORT || 3000;
 
-// 2) Dozwolone originy (dev + prod)
 const FRONTEND_ORIGINS = [
   'http://localhost:3000',
   'http://localhost:4200',
@@ -31,7 +29,6 @@ router.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-// Proste "logowanie" na dev (sprawdza email+hasło w tabeli users)
 router.post('/login', (req, res) => {
   const { email, password } = req.body;
 
@@ -46,15 +43,13 @@ router.post('/login', (req, res) => {
       if (!row) {
         return res.status(401).json({ error: 'Invalid credentials' });
       }
-      // na razie bez JWT, po prostu zwracamy userId
       res.json({ userId: row.id, email: row.email });
     },
   );
 });
 
-// Lista pokoi użytkownika (na razie userId z query / na sztywno)
 router.get('/rooms', (req, res) => {
-  const userId = req.query.userId || 1; // dev: user 1
+  const userId = req.query.userId || 1;
 
   db.all(
     'SELECT id, name FROM rooms WHERE user_id = ? ORDER BY id',
@@ -69,11 +64,9 @@ router.get('/rooms', (req, res) => {
   );
 });
 
-// Sekcje + rośliny + urządzenia dla danego pokoju (ładna struktura zagnieżdżona)
 router.get('/rooms/:roomId/full', (req, res) => {
   const roomId = req.params.roomId;
 
-  // pobierz sekcje
   db.all(
     'SELECT id, name FROM sections WHERE room_id = ? ORDER BY id',
     [roomId],
@@ -89,7 +82,6 @@ router.get('/rooms/:roomId/full', (req, res) => {
 
       const sectionIds = sectionRows.map((s) => s.id);
 
-      // pobierz rośliny
       db.all(
         `SELECT id, section_id, name, species
          FROM plants
@@ -102,7 +94,6 @@ router.get('/rooms/:roomId/full', (req, res) => {
             return res.status(500).json({ error: 'DB error' });
           }
 
-          // pobierz urządzenia
           db.all(
             `SELECT *
              FROM devices
@@ -119,7 +110,6 @@ router.get('/rooms/:roomId/full', (req, res) => {
                 return res.status(500).json({ error: 'DB error' });
               }
 
-              // zagnieżdżenie danych w strukturę sekcja -> rośliny -> czujnik wilgotności, + urządzenia sekcji
               const sections = sectionRows.map((s) => {
                 const sPlants = plantRows.filter((p) => p.section_id === s.id);
                 const sectionDevices = deviceRows.filter(
@@ -155,7 +145,6 @@ router.get('/rooms/:roomId/full', (req, res) => {
   );
 });
 
-// === DODAWANIE POKOJU ===
 router.post('/rooms', (req, res) => {
   const { userId, name } = req.body;
   if (!userId || !name) {
@@ -195,7 +184,6 @@ router.post('/sections', (req, res) => {
   );
 });
 
-// === DODAWANIE ROŚLINY ===
 router.post('/plants', (req, res) => {
   const { sectionId, name, species } = req.body;
   if (!sectionId || !name) {
@@ -274,7 +262,6 @@ router.post('/devices', (req, res) => {
   );
 });
 
-// === ZMIANA NAZWY URZĄDZENIA ===
 router.put('/devices/:id', (req, res) => {
   const id = req.params.id;
   const { name } = req.body;

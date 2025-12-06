@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+
+
 class LightSettings {
   final TimeOfDay startTime;
   final TimeOfDay endTime;

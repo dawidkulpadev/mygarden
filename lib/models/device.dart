@@ -43,6 +43,7 @@ class Device {
     );
   }
 
+
   factory Device.fromJson(Map<String, dynamic> json) {
     final typeStr = json['type'] as String;
     late DeviceType type;

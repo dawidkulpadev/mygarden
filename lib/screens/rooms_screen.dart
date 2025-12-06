@@ -7,7 +7,7 @@ import 'login_screen.dart';
 import 'room_detail_screen.dart';
 
 class RoomsScreen extends StatefulWidget {
-  final int userId; // <- teraz przechowujemy userId
+  final int userId;
 
   const RoomsScreen({
     super.key,
@@ -117,7 +117,6 @@ class _RoomsScreenState extends State<RoomsScreen> {
                     itemBuilder: (context, index) {
                       final room = _rooms[index];
 
-                      // Tymczasowo liczby z mock_data – później też wyciągniemy z backendu
                       final secCount =
                           sections.where((s) => s.roomId == room.id).length;
                       final roomSectionIds = sections
@@ -189,17 +188,71 @@ class _RoomsScreenState extends State<RoomsScreen> {
                   ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content:
-                  Text('Dodawanie pokoju jeszcze niezaimplementowane 🙂'),
-            ),
-          );
-        },
+        onPressed: _showAddRoomDialog,
         icon: const Icon(Icons.add),
         label: const Text('Dodaj pokój'),
       ),
+    );
+  }
+
+  Future<void> _showAddRoomDialog() async {
+    final controller = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+    String? error;
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        final cs = Theme.of(context).colorScheme;
+        return AlertDialog(
+          title: const Text('Nowy pokój'),
+          content: Form(
+            key: formKey,
+            child: TextFormField(
+              controller: controller,
+              decoration: const InputDecoration(
+                labelText: 'Nazwa pokoju',
+              ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Podaj nazwę pokoju';
+                }
+                return null;
+              },
+            ),
+          ),
+          actions: [
+            if (error != null)
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                child: Text(
+                  error!,
+                  style: TextStyle(color: cs.error),
+                ),
+              ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Anuluj'),
+            ),
+            FilledButton(
+              onPressed: () async {
+                if (!formKey.currentState!.validate()) return;
+                try {
+                  await _api.createRoom(widget.userId, controller.text.trim());
+                  if (context.mounted) {
+                    Navigator.of(context).pop();
+                    _loadRooms();
+                  }
+                } catch (e) {
+                  error = e.toString();
+                  (context as Element).markNeedsBuild();
+                }
+              },
+              child: const Text('Zapisz'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -190,7 +190,7 @@ class ApiClient {
   }
 }
 
-/// Sekcja wraz z roślinami (każda z opcjonalnym czujnikiem) i urządzeniami sekcji.
+
 class SectionData {
   final Section section;
   final List<PlantWithSensor> plants;
@@ -206,7 +206,7 @@ class SectionData {
     final section = Section(
       id: json['id'].toString(),
       name: json['name'] as String,
-      roomId: '', // roomId nie jest potrzebne na tym ekranie
+      roomId: '',
     );
 
     final plantsJson = json['plants'] as List<dynamic>? ?? [];

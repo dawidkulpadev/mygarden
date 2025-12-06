@@ -4,6 +4,8 @@ import '../data/mock_data.dart';
 import '../models/device.dart';
 import '../models/light_settings.dart';
 
+
+
 class LightDeviceScreen extends StatefulWidget {
   final Device device;
 
@@ -12,6 +14,8 @@ class LightDeviceScreen extends StatefulWidget {
   @override
   State<LightDeviceScreen> createState() => _LightDeviceScreenState();
 }
+
+
 
 class _LightDeviceScreenState extends State<LightDeviceScreen> {
   late TimeOfDay _startTime;

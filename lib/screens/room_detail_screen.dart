@@ -6,6 +6,8 @@ import '../services/api_client.dart';
 import 'light_device_screen.dart';
 import 'soil_moisture_history_screen.dart';
 
+
+
 class RoomDetailScreen extends StatefulWidget {
   final int roomId;
   final String roomName;
@@ -19,6 +21,8 @@ class RoomDetailScreen extends StatefulWidget {
   @override
   State<RoomDetailScreen> createState() => _RoomDetailScreenState();
 }
+
+
 
 class _RoomDetailScreenState extends State<RoomDetailScreen> {
   final _api = ApiClient();
@@ -444,7 +448,8 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
                                     ),
                                   ),
                                 const SizedBox(height: 16),
-                                // ===== URZĄDZENIA SEKCJI =====
+
+                                // Urządzenia w sekcji
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
@@ -533,7 +538,8 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
   }
 }
 
-/// ==== dodawanie urządzenia ====
+
+
 
 class _AddDeviceSheet extends StatefulWidget {
   final List<SectionData> sections;
@@ -677,7 +683,7 @@ class _AddDeviceSheetState extends State<_AddDeviceSheet> {
                     },
                   ),
                   const SizedBox(height: 8),
-                  // nazwa
+                  
                   TextFormField(
                     controller: _nameController,
                     decoration: const InputDecoration(
@@ -691,7 +697,7 @@ class _AddDeviceSheetState extends State<_AddDeviceSheet> {
                     },
                   ),
                   const SizedBox(height: 8),
-                  // sekcja
+             
                   DropdownButtonFormField<SectionData>(
                     value: _selectedSection,
                     decoration: const InputDecoration(
@@ -712,7 +718,7 @@ class _AddDeviceSheetState extends State<_AddDeviceSheet> {
                     },
                   ),
                   const SizedBox(height: 8),
-                  // roślina (tylko dla wilgotności)
+
                   if (_type == DeviceType.soilMoistureSensor)
                     DropdownButtonFormField<PlantWithSensor>(
                       value: _selectedPlant,
@@ -767,7 +773,7 @@ class _AddDeviceSheetState extends State<_AddDeviceSheet> {
   }
 }
 
-/// ===== Wiersz rośliny z czujnikiem wilgotności + usuwanie + wykres =====
+
 
 class _PlantRow extends StatelessWidget {
   final Plant plant;
@@ -879,7 +885,6 @@ class _PlantRow extends StatelessWidget {
   }
 }
 
-/// ===== Czujnik powietrza – karta z losowymi wartościami + kosz =====
 
 class _AirReading {
   final double temperatureC;

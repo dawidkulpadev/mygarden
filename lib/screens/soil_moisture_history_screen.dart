@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import '../models/device.dart';
 import '../models/plant.dart';
 
+
+
 enum MoistureRange { day, week, month }
 
 class SoilMoistureHistoryScreen extends StatefulWidget {
@@ -23,6 +25,8 @@ class SoilMoistureHistoryScreen extends StatefulWidget {
       _SoilMoistureHistoryScreenState();
 }
 
+
+
 class _SoilMoistureHistoryScreenState extends State<SoilMoistureHistoryScreen> {
   MoistureRange _range = MoistureRange.day;
 
@@ -39,19 +43,17 @@ class _SoilMoistureHistoryScreenState extends State<SoilMoistureHistoryScreen> {
     return hash;
   }
 
-  /// Generuje „udawane”, ale stałe dla urządzenia i zakresu wartości wilgotności (%).
   List<FlSpot> _generateSpots() {
     int points;
     switch (_range) {
       case MoistureRange.day:
-        points = 24; // co godzinę
+        points = 24;
         break;
       case MoistureRange.week:
-        points = 7 * 24; // każda godzina – można zagęścić
+        points = 7 * 24;
         break;
       case MoistureRange.month:
-        // dla czytelności co 4 godziny
-        points = 30 * 6; // 30 dni * 6 punktów / dzień
+        points = 30 * 6;
         break;
     }
 
@@ -61,7 +63,6 @@ class _SoilMoistureHistoryScreenState extends State<SoilMoistureHistoryScreen> {
 
     final spots = <FlSpot>[];
     for (var i = 0; i < points; i++) {
-      // wilgotność w zakresie 25–80%
       final value = 25 + rand.nextDouble() * 55;
       spots.add(FlSpot(i.toDouble(), double.parse(value.toStringAsFixed(1))));
     }
@@ -93,7 +94,6 @@ class _SoilMoistureHistoryScreenState extends State<SoilMoistureHistoryScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Info o czujniku
             Row(
               children: [
                 Container(
@@ -121,7 +121,6 @@ class _SoilMoistureHistoryScreenState extends State<SoilMoistureHistoryScreen> {
               ],
             ),
             const SizedBox(height: 16),
-            // Wybór zakresu
             Wrap(
               spacing: 8,
               children: [
