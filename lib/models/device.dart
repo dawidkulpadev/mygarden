@@ -1,17 +1,20 @@
+import 'light_settings.dart';
+
 enum DeviceType {
-  lightController,      // sterowanie światłem
-  airSensor,            // parametry powietrza
-  soilMoistureSensor,   // wilgotność gleby
+  lightController,
+  airSensor,
+  soilMoistureSensor,
 }
 
 class Device {
-  final String id;           // np. id hardware'u / MAC / UUID
-  final String name;         // nazwa przyjazna: "Czujnik salon okno"
+  final String id;
+  final String name;
   final DeviceType type;
 
-  // na razie tylko proste powiązania identyfikatorami:
-  final String? sectionId;   // dla światła i powietrza
-  final String? plantId;     // dla wilgotności gleby
+  final String? sectionId;
+  final String? plantId;
+
+  final LightSettings? lightSettings;
 
   Device({
     required this.id,
@@ -19,6 +22,7 @@ class Device {
     required this.type,
     this.sectionId,
     this.plantId,
+    this.lightSettings,
   });
 
   Device copyWith({
@@ -27,6 +31,7 @@ class Device {
     DeviceType? type,
     String? sectionId,
     String? plantId,
+    LightSettings? lightSettings,
   }) {
     return Device(
       id: id ?? this.id,
@@ -34,6 +39,43 @@ class Device {
       type: type ?? this.type,
       sectionId: sectionId ?? this.sectionId,
       plantId: plantId ?? this.plantId,
+      lightSettings: lightSettings ?? this.lightSettings,
+    );
+  }
+
+  factory Device.fromJson(Map<String, dynamic> json) {
+    final typeStr = json['type'] as String;
+    late DeviceType type;
+    switch (typeStr) {
+      case 'lightController':
+        type = DeviceType.lightController;
+        break;
+      case 'airSensor':
+        type = DeviceType.airSensor;
+        break;
+      case 'soilMoistureSensor':
+        type = DeviceType.soilMoistureSensor;
+        break;
+      default:
+        type = DeviceType.airSensor;
+    }
+
+    LightSettings? lightSettings;
+    if (type == DeviceType.lightController &&
+        json['light_start_time'] != null &&
+        json['light_end_time'] != null) {
+      lightSettings = LightSettings.fromJson(json);
+    }
+
+    return Device(
+      id: json['id'].toString(),
+      name: json['name'] as String,
+      type: type,
+      sectionId:
+          json['section_id'] != null ? json['section_id'].toString() : null,
+      plantId:
+          json['plant_id'] != null ? json['plant_id'].toString() : null,
+      lightSettings: lightSettings,
     );
   }
 }

@@ -1,7 +1,7 @@
 class Section {
   final String id;
-  final String name;      // np. "Półka przy oknie wschodnim"
-  final String roomId;    // ID pokoju
+  final String name;
+  final String roomId;
 
   Section({
     required this.id,
